@@ -70,11 +70,25 @@
                 transform: translateY(105vh) translateX(10vw);
             }
         }
+
+        #zoomImage {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            object-fit: cover;
+            display: none;
+            z-index: 1000;
+            transition: width 5s ease, height 5s ease;
+        }
     </style>
 </head>
 
 <body>
-
+    <img id="zoomImage" src="Palo.png" alt="Palo Alto"
+        style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; object-fit: cover; display: none; z-index: 1000;">
     <div class="text-center">
         <img id="envelope" src="envelope-closed.PNG" alt="Envelope" style="width: 300px; transition: transform 0.5s;">
         <img id="openedEnvelope" src="hidden.PNG" alt="Opened Envelope" style="width: 200px; display: none; ">
@@ -93,7 +107,7 @@
         <img id="celebrationGif"
             src="https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExOWltdTYwaWlkaDdwNTdkNjR3aDlyY2hxMzNseGhqZ3l4cmxnd3RyeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/4ghO6ZWy7lPz4CVm6y/giphy.gif"
             alt="Celebration" style="display: none; max-width: 100%;">
-        <div id="letter" class="alert alert-success"> Click to reveal more!</div>
+        <div id="letter" class="alert alert-success"> กดตรงนี้อีกจ้าา!</div>
         <div id="pictures" style="display: none;">
             <div class="picture" id="pic2" style="display: none;">
                 <img src="pic2.JPEG" alt="Picture 2" style="width: 400px;" />
@@ -111,6 +125,7 @@
                 <img src="card.jpeg" alt="Card Image" style="width: 400px;" />
             </div>
         </div>
+
 
     </div>
 
@@ -192,17 +207,39 @@
                 if (currentPicIndex < pics.length) {
                     document.getElementById(pics[currentPicIndex]).style.display = 'block';
 
-                    let delay = (currentPicIndex === pics.length - 1) ? 7000 : 3000;
+                    let delay = (currentPicIndex === pics.length - 1) ? 7000 : 2000;
 
                     currentPicIndex++;
 
                     if (currentPicIndex < pics.length) {
                         setTimeout(showNextPicture, delay);
+                    } else {
+                        // All pictures have been shown, now show and zoom Palo.png
+                        setTimeout(showAndZoomPalo, 5000);
                     }
                 }
             }
 
             showNextPicture();
+        }
+
+        function showAndZoomPalo() {
+            const paloImg = document.getElementById('zoomImage');
+            paloImg.style.display = 'block';
+
+            // Force a reflow before setting the new size
+            void paloImg.offsetWidth;
+
+            // Set the new size
+            paloImg.style.width = '2000px';
+            paloImg.style.height = '2000px';
+
+            // Optional: Hide other elements or perform any other actions after zooming
+            setTimeout(() => {
+                // For example, hide other elements:
+                document.getElementById('pictures').style.display = 'none';
+                // Add any other actions you want to perform after the zoom is complete
+            }, 5000);
         }
 
         // Remove the revealPictures button and its event listener
